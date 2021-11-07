@@ -27,7 +27,7 @@
       (format stream "failed to send sms: ~a" (str c)))))
 
 
-(defun send-message (phone-number msg &key (dry-run nil))
+(defun send-message (phone-number msg &key (dry-run t))
   (restart-case
     (bind ((twilio-account-sid (santa.config:value :twilio-account-sid))
            (twilio-sid (santa.config:value :twilio-sid))
@@ -121,6 +121,30 @@
   pairs)
 
 
+(defun check-all-give (pairs people)
+  (bind ((givers (loop for (g _) in pairs collect g))
+         (remaining (set-difference people givers :test #'equal)))
+    (when remaining
+      (error 'pair-failure
+             :str (format
+                    nil
+                    "not all people are giving a gift, remaining: ~a"
+                    remaining))))
+  pairs)
+
+
+(defun check-all-receive (pairs people)
+  (bind ((recv (loop for (_ r) in pairs collect r))
+         (remaining (set-difference people recv :test #'equal)))
+    (when remaining
+      (error 'pair-failure
+             :str (format
+                    nil
+                    "not all people are receiving a gift, remaining: ~a"
+                    remaining))))
+  pairs)
+
+
 (defun pair-with-restarts (people forbidden-pairs)
   (restart-case
     (->
@@ -145,6 +169,8 @@
                                          :test #'equal))))
         result)
       (check-reciprocal-pairs)
+      (check-all-give people)
+      (check-all-receive people)
       )
     (return-nil
       ()
