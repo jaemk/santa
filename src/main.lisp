@@ -223,7 +223,7 @@
 
 
 (defun main (argvs)
-  ;; handle any errors if they aren't cause by the catch-all handler in 'main
+  ;; handle any errors if they aren't caught by the catch-all handler in 'main
   (setf
     *debugger-hook*
     (lambda (c old-hook)
