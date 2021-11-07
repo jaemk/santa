@@ -12,5 +12,6 @@ system-index.txt
 build/
 commit_hash.txt
 .env
-local/
+local/*
+!local/.gitkeep
 
