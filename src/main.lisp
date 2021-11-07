@@ -111,6 +111,7 @@
 
 
 (defun check-reciprocal-pairs (pairs)
+  ; I have you and you have me and he has she and she has he
   (loop for (gifter giftee) in pairs
         do (bind ((giftee-giftee (second (assoc giftee pairs :test #'equal))))
              (when (equal gifter giftee-giftee)
