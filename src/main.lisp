@@ -38,7 +38,7 @@
       (when (not dry-run)
         (->>
           (drakma:http-request
-            #?"https://api.twilio.com/2010-04-01/Accounts/${twilio-account-sid}/Messages.json"
+            #?|https://api.twilio.com/2010-04-01/Accounts/${twilio-account-sid}/Messages.json|
             :method :post
             :basic-authorization (list twilio-sid twilio-secret)
             :parameters
@@ -86,19 +86,19 @@
          (str-pairs (format nil "~{~{~a~^: ~}~^~%~}" pairs))
          (admin "You are receiving this because you are an admin.")
          (footer "Do not reply to this number."))
-    #?"\n${header}\n\n${str-pairs}\n\n${admin}\n\n${footer}"))
+    #?|\n${header}\n\n${str-pairs}\n\n${admin}\n\n${footer}|))
 
 
 (defun format-message (giver receiver blurbs)
   (bind ((tgiver (str:title-case giver))
          (treceiver (str:title-case receiver))
          (header "Secret Santa Time!")
-         (assign #?"Hi, ${tgiver}! You have been assigned to ${treceiver}!")
+         (assign #?|Hi, ${tgiver}! You have been assigned to ${treceiver}!|)
          (likes (second (assoc receiver blurbs :test #'equal)))
          (money "Spend target: $50ish")
          (footer "Do not reply to this number")
          )
-    #?"\n${header}\n\n${assign}\n\n${likes}\n\n${money}\n\n${footer}"))
+    #?|\n${header}\n\n${assign}\n\n${likes}\n\n${money}\n\n${footer}|))
 
 
 (defun get-allowed (person people forbidden-pairs)
